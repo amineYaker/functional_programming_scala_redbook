@@ -25,3 +25,9 @@
 - memoizing with lazy vals (caching)
 - laziness makes code reusable and optimized without having to manually short cut the loops
 - => B (taking a parameter by name) which make a function choose if it wants to evaluate it or not 
+
+# chapter6: state
+- using pure functions that accepts a state as an argument and returns the new state with the result
+- for comprehensions make it look like imperative programming
+- flatMap with the help of unit can generate both map and map2
+- basic State Monad functions (modify, set , get)
