@@ -31,3 +31,8 @@
 - for comprehensions make it look like imperative programming
 - flatMap with the help of unit can generate both map and map2
 - basic State Monad functions (modify, set , get)
+
+#chapter7: Par
+- functional library (how to abstract functions).
+- API as an Algebra.
+- how to rewrite and abstract the code.
