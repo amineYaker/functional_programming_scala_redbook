@@ -1,3 +1,5 @@
+package amine.chapter7
+
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.Future
@@ -6,12 +8,12 @@ import java.util.concurrent.ExecutorService
 
 /* def map2[A,B,C](a: Par[A], b: Par[B])(f: (A,B) => C) : Par[C]*/
 
-// Basic implementation of Par
-type Par[A] = ExecutorService => Future[A]
-
-def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
-
 object Par {
+
+// Basic implementation of Par
+  type Par[A] = ExecutorService => Future[A]
+
+  def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
 
   def unit[A](a: A): Par[A] = (es: ExecutorService) => UnitFuture(a)
 
@@ -111,5 +113,8 @@ object Par {
     join(map(pa)(choices))
 
   def equals[A](p1: Par[A], p2: Par[A]): Boolean = ???
+
+  def equal[A](p: Par[A], p2: Par[A]): Par[Boolean] =
+    Par.map2(p, p2)(_ == _)
 
 }

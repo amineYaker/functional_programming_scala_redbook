@@ -32,7 +32,12 @@
 - flatMap with the help of unit can generate both map and map2
 - basic State Monad functions (modify, set , get)
 
-#chapter7: Par
+# chapter7: Par
 - functional library (how to abstract functions).
 - API as an Algebra.
 - how to rewrite and abstract the code.
+
+# chapter8: Property based testing lib
+- abstract algebra vs concrete implementation.
+- convenient functions.
+- reuse of same patterns (map, flatMap ...)
