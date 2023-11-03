@@ -38,6 +38,10 @@
 - how to rewrite and abstract the code.
 
 # chapter8: Property based testing lib
-- abstract algebra vs concrete implementation.
-- convenient functions.
+- abstract algebra vs concrete implementation
+- convenient functions
 - reuse of same patterns (map, flatMap ...)
+
+# chapter9: Parser
+- algebraic design
+- thinking in terms of library and function capabilities before low level implementation
