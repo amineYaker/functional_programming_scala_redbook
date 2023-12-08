@@ -1,3 +1,5 @@
+package amine.chapter11
+
 trait Functor[F[_]] {
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
@@ -95,77 +97,4 @@ trait Monad[F[_]] extends Functor[F] {
 
   // the identity monad
 
-}
-//monad instances ... kind of trivial
-
-// monadic functions A => F[B]
-
-case class Id[A](value: A) {
-  def map[A, B](fa: Id[A])(f: A => B): Id[B] =
-    Id[B](f(fa.value))
-
-  def flatMap[A, B](ma: Id[A])(f: A => Id[B]): Id[B] =
-    f(ma.value)
-}
-
-object Id {
-
-  implicit val monadId: Monad[Id] = new Monad[Id] {
-    override def unit[A](a: => A): Id[A] = Id(a)
-    override def flatMap[A, B](ma: Id[A])(f: A => Id[B]): Id[B] =
-      ma.flatMap(ma)(f)
-
-    override def codistribute[A, B](e: Either[Id[A], Id[B]]): Id[Either[A, B]] =
-      ???
-    override def compose[A, B, C](f: A => Id[B], g: B => Id[C]): A => Id[C] =
-      ???
-    override def distribute[A, B](fab: Id[(A, B)]): (Id[A], Id[B]) = ???
-    override def filterM[A](ms: List[A])(f: A => Id[Boolean]): Id[List[A]] = ???
-    override def flatMapViaCompose[A, B](ma: Id[A])(f: A => Id[B]): Id[B] = ???
-    override def flatMapViaJoin[A, B](ma: Id[A])(f: A => Id[B]): Id[B] = ???
-    override def join[A](mma: Id[Id[A]]): Id[A] = ???
-    override def map2[A, B, C](ma: Id[A], mb: Id[B])(f: (A, B) => C): Id[C] =
-      ???
-    override def product[A, B](ma: Id[A], mb: Id[B]): Id[(A, B)] = ???
-    override def replicateM[A](n: Int, ma: Id[A]): Id[List[A]] = ???
-    override def sequence[A](lma: List[Id[A]]): Id[List[A]] = ???
-    override def traverse[A, B](la: List[A])(f: A => Id[B]): Id[List[B]] = ???
-  }
-}
-
-case class State[S, +A](run: S => (A, S)) {
-  def map[B](f: A => B): State[S, B] = flatMap(a => State.unit(f(a)))
-  def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
-    flatMap(a => sb.map(b => f(a, b)))
-  def flatMap[B](f: A => State[S, B]): State[S, B] = State(s => {
-    val (a, s1) = run(s)
-    f(a).run(s1)
-  })
-}
-
-object State {
-  def unit[S, A](a: A): State[S, A] = State(s => (a, s))
-}
-
-//lamda syntax at type level
-// We could do stuff like State[Int, _] with kind projector library
-def stateMonad[S] = new Monad[({ type f[x] = State[S, x] })#f] {
-  override def unit[A](a: => A): State[S, A] = State(s => (a, s))
-
-  override def flatMap[A, B](ma: State[S, A])(
-      f: A => State[S, B]
-  ): State[S, B] = ma.flatMap(f)
-
-}
-
-case class Reader[R, A](run: R => A)
-
-object Reader {
-  def readerMonad[R] = new Monad[({ type f[x] = Reader[R, x] })#f] {
-    override def flatMap[A, B](ma: Reader[R, A])(
-        f: A => Reader[R, B]
-    ): Reader[R, B] = Reader(r => f(ma.run(r)).run(r))
-    override def unit[A](a: => A): Reader[R, A] =
-      Reader(_ => a)
-  }
 }
